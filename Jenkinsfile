@@ -2,32 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                git url: 'https://github.com/olaeid-code/terraform-aws-infra.git', branch: 'master'
-            }
-        }
-
         stage('Terraform Init') {
             steps {
-                sh 'terraform plan -var-file="dev.tfvars"'
-
+                sh 'terraform init'
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                sh 'terraform plan'
+                sh 'terraform plan -var-file=dev.tfvars'
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                input message: "Do you want to apply?"
-                sh 'terraform apply -auto-approve'
+                sh 'terraform apply -auto-approve -var-file=dev.tfvars'
             }
         }
     }
 }
+
 
 
